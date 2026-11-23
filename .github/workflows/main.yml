@@ -1,4 +1,4 @@
-name: Build Rust Project
+name: Auto-Unzip and Build Rust Project
 
 on:
   push:
@@ -12,8 +12,14 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Unzip project archive
+      run: |
+        unzip -q "*.zip" -d extracted_project || echo "No zip to extract"
+        ls -la extracted_project
+
     - name: Set up Rust toolchain
       uses: dtolnay/rust-toolchain@stable
 
     - name: Build project workspace
+      working-directory: extracted_project/q0idmation-main
       run: cargo build --release
